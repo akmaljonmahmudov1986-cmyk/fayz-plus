@@ -1,0 +1,89 @@
+@import url('https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --dark0: #050e16;
+  --dark1: #071520;
+  --dark2: #0a1e2c;
+  --dark3: #0d2535;
+  --teal1: #1D9E75;
+  --teal2: #5DCAA5;
+  --teal3: #9FE1CB;
+  --teal4: #c8f0e2;
+  --text: #e8f4f0;
+  --muted: rgba(180,220,210,0.55);
+  --border: rgba(29,158,117,0.18);
+  --cardbg: rgba(255,255,255,0.04);
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  background: var(--dark0);
+  color: var(--text);
+  font-family: 'DM Sans', sans-serif;
+  overflow-x: hidden;
+}
+
+h1, h2, h3, h4, .font-display {
+  font-family: 'Syne', sans-serif;
+}
+
+::selection {
+  background: rgba(29,158,117,0.35);
+  color: #fff;
+}
+
+::-webkit-scrollbar { width: 4px; }
+::-webkit-scrollbar-track { background: var(--dark1); }
+::-webkit-scrollbar-thumb { background: var(--teal1); border-radius: 2px; }
+
+.glow-teal {
+  box-shadow: 0 0 30px rgba(29,158,117,0.25), 0 0 60px rgba(29,158,117,0.1);
+}
+
+.border-teal { border: 0.5px solid var(--border); }
+
+.card-hover {
+  transition: border-color 0.3s, background 0.3s, transform 0.3s;
+}
+.card-hover:hover {
+  border-color: rgba(29,158,117,0.45) !important;
+  background: rgba(29,158,117,0.07) !important;
+  transform: translateY(-2px);
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-8px); }
+}
+@keyframes pulse-ring {
+  0% { transform: scale(0.8); opacity: 0.8; }
+  100% { transform: scale(2); opacity: 0; }
+}
+@keyframes signal-move {
+  0% { stroke-dashoffset: 1000; }
+  100% { stroke-dashoffset: 0; }
+}
+@keyframes shimmer {
+  0% { background-position: -200% center; }
+  100% { background-position: 200% center; }
+}
+
+.animate-float { animation: float 4s ease-in-out infinite; }
+.pulse-dot {
+  position: relative;
+}
+.pulse-dot::after {
+  content: '';
+  position: absolute;
+  inset: -3px;
+  border-radius: 50%;
+  border: 1px solid var(--teal2);
+  animation: pulse-ring 1.8s ease-out infinite;
+}
