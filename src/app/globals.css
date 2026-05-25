@@ -1,0 +1,145 @@
+@import url('https://fonts.googleapis.com/css2?family=Clash+Display:wght@400;500;600;700&family=Space+Grotesk:wght@300;400;500;600&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --d0: #04090f;
+  --d1: #060e18;
+  --d2: #091525;
+  --d3: #0c1e32;
+  --d4: #0f253e;
+  --t0: #0a6647;
+  --t1: #1D9E75;
+  --t2: #3abf8f;
+  --t3: #5DCAA5;
+  --t4: #9FE1CB;
+  --t5: #cff2e6;
+  --acc: #00ffc2;
+  --blue: #0a4f8a;
+  --blue2: #1a7fd4;
+  --text: #dff2ec;
+  --muted: rgba(159,225,203,0.5);
+  --border: rgba(29,158,117,0.15);
+  --border2: rgba(29,158,117,0.28);
+  --card: rgba(9,21,37,0.7);
+  --glass: rgba(13,30,50,0.5);
+}
+
+*{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{
+  background:var(--d0);
+  color:var(--text);
+  font-family:'Space Grotesk',sans-serif;
+  overflow-x:hidden;
+}
+h1,h2,h3,.display{font-family:'Clash Display',sans-serif;}
+
+::selection{background:rgba(0,255,194,0.2);color:#fff;}
+::-webkit-scrollbar{width:3px;}
+::-webkit-scrollbar-track{background:var(--d1);}
+::-webkit-scrollbar-thumb{background:var(--t1);border-radius:2px;}
+
+/* Glassmorphism card */
+.glass-card{
+  background:var(--glass);
+  backdrop-filter:blur(20px);
+  -webkit-backdrop-filter:blur(20px);
+  border:0.5px solid var(--border2);
+  border-radius:16px;
+}
+.glass-card:hover{
+  border-color:rgba(29,158,117,0.5);
+  background:rgba(13,30,50,0.7);
+  transform:translateY(-3px);
+  transition:all 0.35s cubic-bezier(.25,.46,.45,.94);
+}
+
+/* Neon glow text */
+.glow-text{
+  color:var(--t3);
+  text-shadow:0 0 20px rgba(93,202,165,0.4),0 0 40px rgba(93,202,165,0.15);
+}
+
+/* Gradient border trick */
+.grad-border{
+  position:relative;
+  border-radius:16px;
+  background:var(--glass);
+}
+.grad-border::before{
+  content:'';
+  position:absolute;
+  inset:0;
+  border-radius:16px;
+  padding:0.5px;
+  background:linear-gradient(135deg,rgba(29,158,117,0.4),rgba(0,255,194,0.1),rgba(29,158,117,0.05));
+  -webkit-mask:linear-gradient(#fff 0 0) content-box,linear-gradient(#fff 0 0);
+  mask:linear-gradient(#fff 0 0) content-box,linear-gradient(#fff 0 0);
+  -webkit-mask-composite:xor;
+  mask-composite:exclude;
+  pointer-events:none;
+}
+
+/* Animated gradient text */
+.grad-text{
+  background:linear-gradient(135deg,var(--t3) 0%,var(--acc) 50%,var(--t3) 100%);
+  background-size:200% auto;
+  -webkit-background-clip:text;
+  background-clip:text;
+  -webkit-text-fill-color:transparent;
+  animation:gradShift 4s linear infinite;
+}
+@keyframes gradShift{
+  0%{background-position:0% center;}
+  100%{background-position:200% center;}
+}
+
+/* Scan line effect */
+.scanline{
+  position:relative;
+  overflow:hidden;
+}
+.scanline::after{
+  content:'';
+  position:absolute;
+  top:-100%;
+  left:0;
+  width:100%;
+  height:2px;
+  background:linear-gradient(90deg,transparent,rgba(0,255,194,0.3),transparent);
+  animation:scan 3s linear infinite;
+}
+@keyframes scan{
+  0%{top:-2px;}
+  100%{top:100%;}
+}
+
+/* Pulse ring */
+@keyframes pulseRing{
+  0%{transform:scale(0.9);opacity:0.8;}
+  100%{transform:scale(2.2);opacity:0;}
+}
+/* Float */
+@keyframes floatY{
+  0%,100%{transform:translateY(0);}
+  50%{transform:translateY(-10px);}
+}
+/* Blink cursor */
+@keyframes blink{
+  0%,100%{opacity:1;}50%{opacity:0;}
+}
+
+/* 3D card tilt via CSS */
+.tilt-card{
+  transition:transform 0.2s ease,box-shadow 0.2s ease;
+  transform-style:preserve-3d;
+}
+
+/* Ticker text */
+@keyframes ticker{
+  0%{transform:translateX(0);}
+  100%{transform:translateX(-50%);}
+}
