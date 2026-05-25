@@ -423,7 +423,7 @@ export default function Home() {
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 8 }}>
             {[
               {n:1,e:'png'},{n:2,e:'png'},{n:3,e:'png'},{n:4,e:'png'},{n:5,e:'png'},
-              {n:6,e:'png'},{n:7,e:'jpg'},{n:8,e:'jpg'},{n:9,e:'jpg'},{n:10,e:'png'},
+              {n:6,e:'png'},{n:9,e:'jpg'},{n:10,e:'png'},
               {n:11,e:'png'},{n:12,e:'png'},{n:13,e:'png'},{n:14,e:'png'},{n:15,e:'png'},
               {n:16,e:'jpg'},{n:17,e:'png'},{n:18,e:'png'},{n:20,e:'png'},
               {n:21,e:'png'},{n:22,e:'jpg'},{n:23,e:'jpg'},{n:24,e:'jpg'},{n:25,e:'png'},
