@@ -14,8 +14,8 @@ export default function SpineCanvas() {
   }, []);
 
   const images = [
-    { src: '/SPINE.png', label: "Umurtqa pog'onasi", sub: 'Disk grija va nerv siqilishi' },
-    { src: '/TRIGEMINAL.png', label: 'Trigeminal Nevralgiya', sub: 'V1 · V2 · V3 shoxlari' },
+    { src: '/spine-image.png', label: "Umurtqa pog'onasi", sub: 'Disk grija va nerv siqilishi' },
+    { src: '/trigeminal-image.png', label: 'Trigeminal Nevralgiya', sub: 'V1 · V2 · V3 shoxlari' },
     { src: '/spine_surgery_clinic.png', label: 'Fayz Plyus Klinikasi', sub: 'Chinobod, Andijon viloyati' },
   ];
 
