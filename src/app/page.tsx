@@ -353,12 +353,10 @@ export default function Home() {
               ))}
             </motion.div>
           </div>
-          {!isMobile && (
-            <motion.div initial={{ opacity: 0, x: 50 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: 1, delay: .22 }}
-              style={{ height: 520, position: 'relative', filter: 'drop-shadow(0 0 40px rgba(0,255,194,0.08))' }}>
-              <SpineCanvas />
-            </motion.div>
-          )}
+          <motion.div initial={{ opacity: 0, x: 50 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: 1, delay: .22 }}
+            style={{ height: isMobile ? 340 : 520, position: 'relative', filter: 'drop-shadow(0 0 40px rgba(0,255,194,0.08))' }}>
+            <SpineCanvas />
+          </motion.div>
         </div>
         <div style={{ position: 'absolute', bottom: 0, left: 0, right: 0, height: 120, background: 'linear-gradient(transparent,var(--d0))', zIndex: 6 }} />
       </section>
@@ -513,4 +511,3 @@ export default function Home() {
     </div>
   );
 }
-  
