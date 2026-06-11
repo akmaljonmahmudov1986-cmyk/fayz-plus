@@ -2,11 +2,22 @@
 import dynamic from 'next/dynamic';
 import { useEffect, useRef, useState, useCallback } from 'react';
 import { motion, useInView, useMotionValue, useSpring } from 'framer-motion';
-import { MapPin, Phone, Mail, Clock, ChevronRight, Send, ArrowUpRight } from 'lucide-react';
+import { MapPin, Phone, Mail, Clock, ChevronRight, Send, ArrowUpRight, Menu, X } from 'lucide-react';
 
 const NeuralBackground = dynamic(() => import('@/components/NeuralBackground'), { ssr: false });
 const SpineCanvas = dynamic(() => import('@/components/SpineCanvas'), { ssr: false });
 const NerveBanner = dynamic(() => import('@/components/NerveBanner'), { ssr: false });
+
+function useIsMobile() {
+  const [isMobile, setIsMobile] = useState(false);
+  useEffect(() => {
+    const check = () => setIsMobile(window.innerWidth < 768);
+    check();
+    window.addEventListener('resize', check);
+    return () => window.removeEventListener('resize', check);
+  }, []);
+  return isMobile;
+}
 
 const FadeIn = ({ children, delay = 0, y = 28, className = '' }: { children: React.ReactNode; delay?: number; y?: number; className?: string }) => {
   const ref = useRef(null);
@@ -143,7 +154,7 @@ function ChatBot() {
         {open ? '✕' : '👩‍⚕️'}
       </button>
       {open && (
-        <div style={{ position: 'fixed', bottom: 96, right: 28, zIndex: 9998, width: 340, height: 480, background: 'rgba(4,9,15,0.97)', border: '0.5px solid rgba(0,255,194,0.2)', borderRadius: 16, display: 'flex', flexDirection: 'column', overflow: 'hidden', backdropFilter: 'blur(20px)', boxShadow: '0 8px 40px rgba(0,0,0,0.5)' }}>
+        <div style={{ position: 'fixed', bottom: 96, right: 28, zIndex: 9998, width: 'min(340px, calc(100vw - 40px))', height: 480, background: 'rgba(4,9,15,0.97)', border: '0.5px solid rgba(0,255,194,0.2)', borderRadius: 16, display: 'flex', flexDirection: 'column', overflow: 'hidden', backdropFilter: 'blur(20px)', boxShadow: '0 8px 40px rgba(0,0,0,0.5)' }}>
           <div style={{ padding: '14px 18px', borderBottom: '0.5px solid rgba(0,255,194,0.1)', background: 'rgba(0,255,194,0.04)', display: 'flex', alignItems: 'center', gap: 10 }}>
             <span style={{ fontSize: 22 }}>👩‍⚕️</span>
             <div>
@@ -240,28 +251,30 @@ export default function Home() {
   const [menu, setMenu] = useState(false);
   const [showIntro, setShowIntro] = useState(true);
   const [scrolled, setScrolled] = useState(false);
-  const [cursor, setCursor] = useState({ x: 0, y: 0 });
+  const isMobile = useIsMobile();
   const curX = useSpring(0, { stiffness: 120, damping: 18 });
   const curY = useSpring(0, { stiffness: 120, damping: 18 });
 
   useEffect(() => {
     const onS = () => setScrolled(window.scrollY > 40);
     window.addEventListener('scroll', onS);
-    const onM = (e: MouseEvent) => { setCursor({ x: e.clientX, y: e.clientY }); curX.set(e.clientX); curY.set(e.clientY); };
+    const onM = (e: MouseEvent) => { curX.set(e.clientX); curY.set(e.clientY); };
     window.addEventListener('mousemove', onM);
     return () => { window.removeEventListener('scroll', onS); window.removeEventListener('mousemove', onM); };
   }, [curX, curY]);
 
-  const navLinks = ['Vrachlar', 'Galereya', 'Haqimizda', 'Kontakt'];
+  const navLinks = ['Haqimizda', 'Navbat', 'Kontakt'];
 
   return (
-    <div style={{ background: 'var(--d0)', minHeight: '100vh' }}>
+    <div style={{ background: 'var(--d0)', minHeight: '100vh', overflowX: 'hidden' }}>
       {showIntro && <HologramIntro onDone={() => setShowIntro(false)} />}
       <ChatBot />
-      <motion.div style={{ x: curX, y: curY, position: 'fixed', top: -16, left: -16, width: 32, height: 32, borderRadius: '50%', border: '1px solid rgba(0,255,194,0.45)', pointerEvents: 'none', zIndex: 9999, mixBlendMode: 'screen' }} />
+      {!isMobile && (
+        <motion.div style={{ x: curX, y: curY, position: 'fixed', top: -16, left: -16, width: 32, height: 32, borderRadius: '50%', border: '1px solid rgba(0,255,194,0.45)', pointerEvents: 'none', zIndex: 9999, mixBlendMode: 'screen' }} />
+      )}
 
-      <nav style={{ position: 'fixed', top: 0, left: 0, right: 0, zIndex: 100, background: scrolled ? 'rgba(4,9,15,0.96)' : 'transparent', borderBottom: scrolled ? '0.5px solid var(--border)' : 'none', backdropFilter: scrolled ? 'blur(16px)' : 'none', transition: 'all .35s' }}>
-        <div style={{ maxWidth: 1280, margin: '0 auto', padding: '0 28px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', height: 64 }}>
+      <nav style={{ position: 'fixed', top: 0, left: 0, right: 0, zIndex: 100, background: scrolled || menu ? 'rgba(4,9,15,0.96)' : 'transparent', borderBottom: scrolled || menu ? '0.5px solid var(--border)' : 'none', backdropFilter: scrolled || menu ? 'blur(16px)' : 'none', transition: 'all .35s' }}>
+        <div style={{ maxWidth: 1280, margin: '0 auto', padding: '0 20px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', height: 64 }}>
           <motion.div initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
             <svg width="34" height="34" viewBox="0 0 28 28" fill="none">
               <circle cx="10" cy="8" r="5" fill="var(--t1)" />
@@ -275,23 +288,43 @@ export default function Home() {
               <div style={{ fontSize: 8, color: 'var(--t3)', letterSpacing: '1.4px', textTransform: 'uppercase' }}>Endoskopik Jarrohlik</div>
             </div>
           </motion.div>
-          <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: .1 }} style={{ display: 'flex', gap: 32, alignItems: 'center' }}>
-            {navLinks.map(item => (
-              <a key={item} href={`#${item.toLowerCase()}`} style={{ fontSize: 12.5, color: 'var(--muted)', textDecoration: 'none', transition: 'color .2s', letterSpacing: '.2px' }}
-                onMouseEnter={e => (e.currentTarget.style.color = 'var(--t3)')}
-                onMouseLeave={e => (e.currentTarget.style.color = 'var(--muted)')}>{item}</a>
-            ))}
-            <a href="#navbat">
-              <button style={s.iBtn}>Navbat olish <ArrowUpRight size={14} /></button>
-            </a>
-          </motion.div>
+
+          {!isMobile && (
+            <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: .1 }} style={{ display: 'flex', gap: 32, alignItems: 'center' }}>
+              {navLinks.map(item => (
+                <a key={item} href={`#${item.toLowerCase()}`} style={{ fontSize: 12.5, color: 'var(--muted)', textDecoration: 'none', transition: 'color .2s', letterSpacing: '.2px' }}
+                  onMouseEnter={e => (e.currentTarget.style.color = 'var(--t3)')}
+                  onMouseLeave={e => (e.currentTarget.style.color = 'var(--muted)')}>{item}</a>
+              ))}
+              <a href="#navbat">
+                <button style={s.iBtn}>Navbat olish <ArrowUpRight size={14} /></button>
+              </a>
+            </motion.div>
+          )}
+
+          {isMobile && (
+            <button onClick={() => setMenu(!menu)} style={{ background: 'transparent', border: 'none', color: '#fff', cursor: 'pointer', display: 'flex', alignItems: 'center', padding: 8 }} aria-label="Menyu">
+              {menu ? <X size={26} /> : <Menu size={26} />}
+            </button>
+          )}
         </div>
+
+        {isMobile && menu && (
+          <div style={{ background: 'rgba(4,9,15,0.98)', borderTop: '0.5px solid var(--border)', padding: '12px 20px 20px', display: 'flex', flexDirection: 'column', gap: 4 }}>
+            {navLinks.map(item => (
+              <a key={item} href={`#${item.toLowerCase()}`} onClick={() => setMenu(false)} style={{ fontSize: 15, color: 'var(--text)', textDecoration: 'none', padding: '12px 4px', borderBottom: '0.5px solid rgba(0,255,194,0.08)' }}>{item}</a>
+            ))}
+            <a href="#navbat" onClick={() => setMenu(false)} style={{ marginTop: 12 }}>
+              <button style={{ ...s.iBtn, justifyContent: 'center', width: '100%' }}>Navbat olish <ArrowUpRight size={14} /></button>
+            </a>
+          </div>
+        )}
       </nav>
 
       <section style={{ position: 'relative', minHeight: '100vh', display: 'flex', alignItems: 'center', overflow: 'hidden', background: 'radial-gradient(ellipse 80% 60% at 50% -10%, rgba(29,158,117,0.12) 0%, transparent 60%), linear-gradient(180deg,var(--d0) 0%,var(--d1) 100%)' }}>
         <NeuralBackground />
         <div style={{ position: 'absolute', inset: 0, backgroundImage: 'linear-gradient(rgba(0,255,194,0.03) 1px,transparent 1px),linear-gradient(90deg,rgba(0,255,194,0.03) 1px,transparent 1px)', backgroundSize: '60px 60px', zIndex: 1, pointerEvents: 'none' }} />
-        <div style={{ position: 'relative', zIndex: 5, maxWidth: 1280, margin: '0 auto', padding: '100px 28px 60px', width: '100%', display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 48, alignItems: 'center' }}>
+        <div style={{ position: 'relative', zIndex: 5, maxWidth: 1280, margin: '0 auto', padding: isMobile ? '110px 20px 50px' : '100px 28px 60px', width: '100%', display: 'grid', gridTemplateColumns: isMobile ? '1fr' : '1fr 1fr', gap: isMobile ? 32 : 48, alignItems: 'center' }}>
           <div>
             <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: .1 }}>
               <span style={{ display: 'inline-flex', alignItems: 'center', gap: 8, background: 'rgba(0,255,194,0.06)', border: '0.5px solid rgba(0,255,194,0.2)', color: 'var(--acc)', fontSize: 10, letterSpacing: '2px', padding: '5px 14px', borderRadius: 30, marginBottom: 22, textTransform: 'uppercase' }}>
@@ -300,7 +333,7 @@ export default function Home() {
               </span>
             </motion.div>
             <motion.h1 initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: .18 }}
-              style={{ fontFamily: 'Clash Display,sans-serif', fontSize: 'clamp(34px,4.5vw,58px)', fontWeight: 700, lineHeight: 1.1, color: '#fff', marginBottom: 18 }}>
+              style={{ fontFamily: 'Clash Display,sans-serif', fontSize: 'clamp(30px,7vw,58px)', fontWeight: 700, lineHeight: 1.1, color: '#fff', marginBottom: 18 }}>
               Zamonaviy<br /><span className="grad-text">jarrohlik</span> —<br /><span style={{ color: 'var(--t4)' }}>ishonchli sog'liq</span>
             </motion.h1>
             <motion.p initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: .3 }}
@@ -309,10 +342,9 @@ export default function Home() {
             </motion.p>
             <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: .38 }} style={{ display: 'flex', gap: 12, marginBottom: 42 }}>
               <a href="#navbat"><button style={s.iBtn}>Navbat olish <ArrowUpRight size={15} /></button></a>
-              
             </motion.div>
             <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: .48 }}
-              style={{ display: 'flex', gap: 32, paddingTop: 28, borderTop: '0.5px solid var(--border)' }}>
+              style={{ display: 'flex', gap: isMobile ? 20 : 32, paddingTop: 28, borderTop: '0.5px solid var(--border)', flexWrap: 'wrap' }}>
               {[['5000+', 'Operatsiya'], ['98%', 'Muvaffaqiyat'], ['12+', 'Yil']].map(([n, l]) => (
                 <div key={l}>
                   <div style={{ fontFamily: 'Clash Display,sans-serif', fontSize: 24, fontWeight: 700, color: 'var(--acc)' }}>{n}</div>
@@ -321,26 +353,28 @@ export default function Home() {
               ))}
             </motion.div>
           </div>
-          <motion.div initial={{ opacity: 0, x: 50 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: 1, delay: .22 }}
-            style={{ height: 520, position: 'relative', filter: 'drop-shadow(0 0 40px rgba(0,255,194,0.08))' }}>
-            <SpineCanvas />
-          </motion.div>
+          {!isMobile && (
+            <motion.div initial={{ opacity: 0, x: 50 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: 1, delay: .22 }}
+              style={{ height: 520, position: 'relative', filter: 'drop-shadow(0 0 40px rgba(0,255,194,0.08))' }}>
+              <SpineCanvas />
+            </motion.div>
+          )}
         </div>
         <div style={{ position: 'absolute', bottom: 0, left: 0, right: 0, height: 120, background: 'linear-gradient(transparent,var(--d0))', zIndex: 6 }} />
       </section>
 
       <div style={{ position: 'relative', height: 80, overflow: 'hidden', background: 'linear-gradient(90deg,var(--d0),rgba(9,21,37,0.9),var(--d0))', borderTop: '0.5px solid var(--border)', borderBottom: '0.5px solid var(--border)' }}>
         <NerveBanner />
-        <div style={{ position: 'absolute', inset: 0, zIndex: 3, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 12 }}>
+        <div style={{ position: 'absolute', inset: 0, zIndex: 3, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 12, flexWrap: 'wrap', padding: '0 16px' }}>
           {['Trigeminal Nevralgiya', '3 Shohli Nerv', "Umurtqa Pog'onasi", 'Endoskopik Jarrohlik', 'Neyronavigatsiya', 'MRT Diagnostika'].map(chip => (
             <span key={chip} style={{ background: 'rgba(4,9,15,0.85)', border: '0.5px solid rgba(0,255,194,0.2)', borderRadius: 30, padding: '4px 13px', fontSize: 10, color: 'var(--t3)', letterSpacing: '.8px', backdropFilter: 'blur(6px)' }}>{chip}</span>
           ))}
         </div>
       </div>
 
-      <section id="haqimizda" style={{ background: 'linear-gradient(180deg,var(--d2) 0%,var(--d1) 100%)', padding: '88px 28px', position: 'relative', overflow: 'hidden' }}>
+      <section id="haqimizda" style={{ background: 'linear-gradient(180deg,var(--d2) 0%,var(--d1) 100%)', padding: isMobile ? '64px 20px' : '88px 28px', position: 'relative', overflow: 'hidden' }}>
         <div style={{ position: 'absolute', right: -100, top: '50%', transform: 'translateY(-50%)', width: 500, height: 500, borderRadius: '50%', background: 'radial-gradient(circle,rgba(29,158,117,0.06) 0%,transparent 65%)', pointerEvents: 'none' }} />
-        <div style={{ maxWidth: 1280, margin: '0 auto', display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 64, alignItems: 'center', position: 'relative' }}>
+        <div style={{ maxWidth: 1280, margin: '0 auto', display: 'grid', gridTemplateColumns: isMobile ? '1fr' : '1fr 1fr', gap: 64, alignItems: 'center', position: 'relative' }}>
           <FadeIn>
             <div style={s.label}>Biz haqimizda</div>
             <h2 style={{ ...s.h2, marginBottom: 20 }}>Neyrojarrohlikda <span className="glow-text">ishonchli</span> markaz</h2>
@@ -350,20 +384,11 @@ export default function Home() {
             <p style={{ fontSize: 14, color: 'var(--muted)', lineHeight: 1.9, marginBottom: 30 }}>
               Klinikamizda Yevropa standartlaridagi zamonaviy jihozlar, tajribali neyrojarrohlar va individual yondashuv asosida har bir bemor uchun eng yaxshi natijaga erishiladi.
             </p>
-            
-            
           </FadeIn>
-          
         </div>
       </section>
 
-      
-
-      
-
-      
-
-      <section id="navbat" style={{ background: 'linear-gradient(180deg,var(--d2) 0%,var(--d3) 100%)', padding: '88px 28px', position: 'relative', overflow: 'hidden' }}>
+      <section id="navbat" style={{ background: 'linear-gradient(180deg,var(--d2) 0%,var(--d3) 100%)', padding: isMobile ? '64px 20px' : '88px 28px', position: 'relative', overflow: 'hidden' }}>
         <div style={{ position: 'absolute', left: -80, top: '40%', width: 400, height: 400, borderRadius: '50%', background: 'radial-gradient(circle,rgba(29,158,117,0.07) 0%,transparent 65%)', pointerEvents: 'none' }} />
         <div style={{ maxWidth: 1280, margin: '0 auto', position: 'relative' }}>
           <FadeIn><div style={{ textAlign: 'center', marginBottom: 56 }}>
@@ -371,10 +396,10 @@ export default function Home() {
             <h2 style={s.h2}>Navbat olish</h2>
             <p style={s.sub}>Qulay vaqtni tanlang, biz siz bilan bog'lanamiz</p>
           </div></FadeIn>
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 380px', gap: 28, alignItems: 'start' }}>
+          <div style={{ display: 'grid', gridTemplateColumns: isMobile ? '1fr' : '1fr 380px', gap: 28, alignItems: 'start' }}>
             <FadeIn>
-              <div className="glass-card" style={{ padding: 28, display: 'grid', gap: 14 }}>
-                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 14 }}>
+              <div className="glass-card" style={{ padding: isMobile ? 20 : 28, display: 'grid', gap: 14 }}>
+                <div style={{ display: 'grid', gridTemplateColumns: isMobile ? '1fr' : '1fr 1fr', gap: 14 }}>
                   {[['Ism-sharif', 'Ism va familiya'], ['Telefon', '+998 ...']].map(([lbl, ph]) => (
                     <div key={lbl}><label style={{ fontSize: 11, color: 'var(--muted)', display: 'block', marginBottom: 6 }}>{lbl}</label>
                       <input type="text" placeholder={ph} style={s.fi} /></div>
@@ -383,7 +408,7 @@ export default function Home() {
                 <div><label style={{ fontSize: 11, color: 'var(--muted)', display: 'block', marginBottom: 6 }}>Xizmat turi</label>
                   <select style={s.fs}><option>Neyrojarrohlik konsultatsiyasi</option><option>Trigeminal nevralgiya</option><option>Endoskopik diagnostika</option><option>Umurtqa pog'onasi</option><option>MRT / KT</option><option>Reabilitatsiya</option></select>
                 </div>
-                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 14 }}>
+                <div style={{ display: 'grid', gridTemplateColumns: isMobile ? '1fr' : '1fr 1fr', gap: 14 }}>
                   <div><label style={{ fontSize: 11, color: 'var(--muted)', display: 'block', marginBottom: 6 }}>Sana</label>
                     <input type="text" placeholder="KK.OO.YYYY" style={s.fi} /></div>
                   <div><label style={{ fontSize: 11, color: 'var(--muted)', display: 'block', marginBottom: 6 }}>Vaqt</label>
@@ -413,13 +438,13 @@ export default function Home() {
         </div>
       </section>
 
-      <section id="kontakt" style={{ background: 'var(--d1)', padding: '88px 28px' }}>
+      <section id="kontakt" style={{ background: 'var(--d1)', padding: isMobile ? '64px 20px' : '88px 28px' }}>
         <div style={{ maxWidth: 1280, margin: '0 auto' }}>
           <FadeIn><div style={{ textAlign: 'center', marginBottom: 48 }}>
             <div style={s.label}>Manzil</div>
             <h2 style={s.h2}>Bizni toping</h2>
           </div></FadeIn>
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 20 }}>
+          <div style={{ display: 'grid', gridTemplateColumns: isMobile ? '1fr' : '1fr 1fr', gap: 20 }}>
             <FadeIn>
               <div className="glass-card scanline" style={{ height: 220, overflow: 'hidden', borderRadius: 12 }}>
                 <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3017.0311132567695!2d71.98292959999999!3d40.8711914!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x38bca1bdc698961d%3A0x81f15bc2cb73a3fe!2sChinobod%20Fayz%20Plyus%20neyrojarrohlik%20klinikasi!5e0!3m2!1sen!2s!4v1779531484557!5m2!1sen!2s" width="100%" height="220" style={{ border: 0 }} allowFullScreen loading="lazy" referrerPolicy="no-referrer-when-downgrade" />
@@ -449,9 +474,9 @@ export default function Home() {
         </div>
       </section>
 
-      <footer style={{ background: 'linear-gradient(180deg,var(--d0) 0%,#020609 100%)', borderTop: '0.5px solid var(--border)', padding: '52px 28px 26px' }}>
+      <footer style={{ background: 'linear-gradient(180deg,var(--d0) 0%,#020609 100%)', borderTop: '0.5px solid var(--border)', padding: isMobile ? '40px 20px 24px' : '52px 28px 26px' }}>
         <div style={{ maxWidth: 1280, margin: '0 auto' }}>
-          <div style={{ display: 'grid', gridTemplateColumns: '1.6fr 1fr 1fr 1fr', gap: 40, marginBottom: 44 }}>
+          <div style={{ display: 'grid', gridTemplateColumns: isMobile ? '1fr' : '1.6fr 1fr 1fr 1fr', gap: isMobile ? 28 : 40, marginBottom: 44 }}>
             <div>
               <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 14 }}>
                 <svg width="30" height="30" viewBox="0 0 28 28" fill="none"><circle cx="10" cy="8" r="5" fill="var(--t1)" /><circle cx="20" cy="8" r="4" fill="var(--t1)" /><circle cx="10" cy="20" r="4" fill="var(--t1)" /><circle cx="20" cy="20" r="5" fill="var(--t1)" /><circle cx="14" cy="13" r="2.5" fill="var(--acc)" /></svg>
@@ -466,7 +491,7 @@ export default function Home() {
             </div>
             {[
               { t: 'Xizmatlar', ls: ['Neyrojarrohlik', 'Endoskopiya', 'Laparoskopiya', 'MRT · KT', 'Reabilitatsiya'] },
-              { t: 'Klinika', ls: ['Biz haqimizda', 'Vrachlar', 'Galereya', 'Navbat olish', 'Ish vaqti'] },
+              { t: 'Klinika', ls: ['Biz haqimizda', 'Navbat olish', 'Ish vaqti'] },
               { t: 'Kontakt', ls: ['+998 90 573 00 83', 'fayzplus2025@gmail.com', '@fayz17', 'Andijon viloyati Baliqchi tumani'] },
             ].map(col => (
               <div key={col.t}>
@@ -479,7 +504,7 @@ export default function Home() {
               </div>
             ))}
           </div>
-          <div style={{ borderTop: '0.5px solid rgba(0,255,194,0.08)', paddingTop: 20, display: 'flex', justifyContent: 'space-between' }}>
+          <div style={{ borderTop: '0.5px solid rgba(0,255,194,0.08)', paddingTop: 20, display: 'flex', justifyContent: 'space-between', flexWrap: 'wrap', gap: 8 }}>
             <span style={{ fontSize: 11.5, color: 'rgba(159,225,203,0.28)' }}>© 2025 Fayz Plyus. Barcha huquqlar himoyalangan.</span>
             <span style={{ fontSize: 11.5, color: 'rgba(159,225,203,0.28)' }}>Andijon, O'zbekiston</span>
           </div>
@@ -488,3 +513,4 @@ export default function Home() {
     </div>
   );
 }
+  
