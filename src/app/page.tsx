@@ -309,7 +309,7 @@ export default function Home() {
             </motion.p>
             <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: .38 }} style={{ display: 'flex', gap: 12, marginBottom: 42 }}>
               <a href="#navbat"><button style={s.iBtn}>Navbat olish <ArrowUpRight size={15} /></button></a>
-              <a href="#vrachlar"><button style={s.oBtn}>Vrachlar <ChevronRight size={14} /></button></a>
+              
             </motion.div>
             <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: .48 }}
               style={{ display: 'flex', gap: 32, paddingTop: 28, borderTop: '0.5px solid var(--border)' }}>
@@ -350,105 +350,18 @@ export default function Home() {
             <p style={{ fontSize: 14, color: 'var(--muted)', lineHeight: 1.9, marginBottom: 30 }}>
               Klinikamizda Yevropa standartlaridagi zamonaviy jihozlar, tajribali neyrojarrohlar va individual yondashuv asosida har bir bemor uchun eng yaxshi natijaga erishiladi.
             </p>
-            <div style={{ display: 'flex', gap: 16, flexWrap: 'wrap', marginBottom: 32 }}>
-              {['ISO Sertifikati', 'WHO Standartlari', '24/7 Xizmat'].map(tag => (
-                <span key={tag} style={{ background: 'rgba(0,255,194,0.06)', border: '0.5px solid rgba(0,255,194,0.18)', color: 'var(--t3)', fontSize: 11, padding: '6px 13px', borderRadius: 20 }}>{tag}</span>
-              ))}
-            </div>
-            <button style={s.iBtn}>Batafsil <ArrowUpRight size={15} /></button>
+            
+            
           </FadeIn>
-          <FadeIn delay={0.14}>
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12 }}>
-              {([
-                ['🏥', 'Operatsion zal', '5 zamonaviy\noperatsion xona'],
-                ['🔬', 'Diagnostika', '3T MRI · 128-qatlamli\nKT skaneri'],
-                ['💊', 'Reabilitatsiya', 'Kompleks\ntiklanish dasturi'],
-                ['⭐', 'Natijalar', '98% muvaffaqiyat\ndarajasi'],
-              ] as [string, string, string][]).map(([em, title, desc]) => (
-                <div key={title} className="glass-card" style={{ padding: 20, textAlign: 'center' }}>
-                  <div style={{ fontSize: 28, marginBottom: 10 }}>{em}</div>
-                  <div style={{ fontFamily: 'Clash Display,sans-serif', fontSize: 13, fontWeight: 600, color: 'var(--text)', marginBottom: 5 }}>{title}</div>
-                  <div style={{ fontSize: 11, color: 'var(--muted)', lineHeight: 1.55, whiteSpace: 'pre-line' }}>{desc}</div>
-                </div>
-              ))}
-            </div>
-          </FadeIn>
+          
         </div>
       </section>
 
-      <div style={{ background: 'var(--d3)', borderTop: '0.5px solid var(--border)', borderBottom: '0.5px solid var(--border)', position: 'relative', overflow: 'hidden' }}>
-        <div style={{ position: 'absolute', inset: 0, backgroundImage: 'linear-gradient(rgba(0,255,194,0.02) 1px,transparent 1px),linear-gradient(90deg,rgba(0,255,194,0.02) 1px,transparent 1px)', backgroundSize: '40px 40px', pointerEvents: 'none' }} />
-        <div style={{ maxWidth: 1280, margin: '0 auto', display: 'grid', gridTemplateColumns: 'repeat(4,1fr)', position: 'relative' }}>
-          {STATS.map((st, i) => <StatCard key={i} {...st} />)}
-        </div>
-      </div>
+      
 
-      <section id="vrachlar" style={{ background: 'linear-gradient(180deg,var(--d1) 0%,var(--d2) 100%)', padding: '88px 28px' }}>
-        <div style={{ maxWidth: 1280, margin: '0 auto' }}>
-          <FadeIn><div style={{ textAlign: 'center', marginBottom: 56 }}>
-            <div style={s.label}>Vrachlarimiz</div>
-            <h2 style={s.h2}>Mutaxassis jamoamiz</h2>
-            <p style={s.sub}>Har bir vrach sohaning yetakchi mutaxassisi</p>
-          </div></FadeIn>
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit,minmax(280px,1fr))', gap: 16 }}>
-            {DOCTORS.map((d, i) => (
-              <FadeIn key={d.name} delay={i * 0.1}>
-                <TiltCard>
-                  <div className="glass-card" style={{ padding: 28, textAlign: 'center', position: 'relative', overflow: 'hidden' }}>
-                    <div style={{ width: 70, height: 70, background: 'linear-gradient(135deg,rgba(0,255,194,0.12),rgba(29,158,117,0.06))', border: '1px solid rgba(0,255,194,0.2)', borderRadius: '50%', margin: '0 auto 16px', display: 'flex', alignItems: 'center', justifyContent: 'center', fontFamily: 'Clash Display,sans-serif', fontSize: 18, fontWeight: 700, color: 'var(--acc)' }}>{d.initials}</div>
-                    <div style={{ fontFamily: 'Clash Display,sans-serif', fontSize: 15, fontWeight: 600, color: 'var(--text)' }}>{d.name}</div>
-                    <div style={{ fontSize: 12, color: 'var(--t3)', marginTop: 4 }}>{d.spec}</div>
-                    <div style={{ display: 'flex', justifyContent: 'center', gap: 16, marginTop: 14, paddingTop: 14, borderTop: '0.5px solid var(--border)' }}>
-                      {[['Tajriba', d.exp], ['Operatsiya', d.ops], ['Reyting', String(d.rate)]].map(([k, v]) => (
-                        <div key={k} style={{ textAlign: 'center' }}>
-                          <div style={{ fontFamily: 'Clash Display,sans-serif', fontSize: 15, fontWeight: 700, color: 'var(--acc)' }}>{v}</div>
-                          <div style={{ fontSize: 10, color: 'var(--muted)', marginTop: 2 }}>{k}</div>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-                </TiltCard>
-              </FadeIn>
-            ))}
-          </div>
-        </div>
-      </section>
+      
 
-      <section id="galereya" style={{ background: 'var(--d2)', padding: '88px 28px' }}>
-        <div style={{ maxWidth: 1280, margin: '0 auto' }}>
-          <FadeIn><div style={{ textAlign: 'center', marginBottom: 48 }}>
-            <div style={s.label}>Galereya</div>
-            <h2 style={s.h2}>Klinikamiz</h2>
-          </div></FadeIn>
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 8 }}>
-            {[
-              {n:1,e:'png'},{n:2,e:'png'},{n:3,e:'png'},{n:4,e:'png'},{n:5,e:'png'},
-              {n:6,e:'png'},{n:9,e:'jpg'},{n:10,e:'png'},
-              {n:11,e:'png'},{n:12,e:'png'},{n:13,e:'png'},{n:14,e:'png'},{n:15,e:'png'},
-              {n:16,e:'jpg'},{n:17,e:'png'},{n:18,e:'png'},{n:20,e:'png'},
-              {n:21,e:'png'},{n:22,e:'jpg'},{n:23,e:'jpg'},{n:24,e:'jpg'},{n:25,e:'png'},
-              {n:26,e:'png'},{n:27,e:'png'},{n:28,e:'png'},{n:29,e:'png'},{n:30,e:'jpeg'},
-              {n:31,e:'jpg'},{n:34,e:'jpg'},{n:35,e:'jpg'},{n:36,e:'jpg'},{n:37,e:'jpg'},{n:38,e:'jpg'},
-            ].map(({n, e}) => (
-              <div key={n} className="glass-card" style={{ aspectRatio: '16/9', overflow: 'hidden', borderRadius: 10, cursor: 'pointer' }}
-                onClick={() => {
-                  const overlay = document.createElement('div');
-                  overlay.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,0.9);z-index:9999;display:flex;align-items:center;justify-content:center;cursor:pointer';
-                  const img = document.createElement('img');
-                  img.src = `/${n}.${e}`;
-                  img.style.cssText = 'max-width:90vw;max-height:90vh;object-fit:contain;border-radius:12px';
-                  overlay.appendChild(img);
-                  overlay.onclick = () => document.body.removeChild(overlay);
-                  document.body.appendChild(overlay);
-                }}>
-                <img src={`/${n}.${e}`} alt={`Klinika ${n}`} style={{ width: '100%', height: '100%', objectFit: 'cover', transition: 'transform 0.3s' }}
-                  onMouseEnter={e => (e.currentTarget.style.transform = 'scale(1.05)')}
-                  onMouseLeave={e => (e.currentTarget.style.transform = 'scale(1)')} />
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
+      
 
       <section id="navbat" style={{ background: 'linear-gradient(180deg,var(--d2) 0%,var(--d3) 100%)', padding: '88px 28px', position: 'relative', overflow: 'hidden' }}>
         <div style={{ position: 'absolute', left: -80, top: '40%', width: 400, height: 400, borderRadius: '50%', background: 'radial-gradient(circle,rgba(29,158,117,0.07) 0%,transparent 65%)', pointerEvents: 'none' }} />
