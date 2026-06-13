@@ -136,6 +136,9 @@ function BookingForm({ isMobile }: { isMobile: boolean }) {
       });
       const data = await res.json();
       if (res.ok && data.ok) {
+       if (typeof window !== 'undefined' && (window as any).fbq) {
+          (window as any).fbq('track', 'Lead');
+        }
         setStatus('ok');
         setIsm('');
         setTelefon('');
