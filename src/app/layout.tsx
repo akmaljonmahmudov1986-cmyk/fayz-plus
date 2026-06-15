@@ -6,7 +6,7 @@ export const metadata: Metadata = {
   title: 'Fayz Plyus — Endoskopik Jarrohlik Markazi',
   description: "O'zbekistondagi yetakchi neyrojarrohlik va endoskopik jarrohlik klinikasi. Trigeminal nevralgiya, umurtqa pog'onasi va bosh miya kasalliklari bo'yicha mutaxassis.",
   other: {
-    'facebook-domain-verification': '8nh2h932fwh4pmnxp08ljnq79wm0ae',
+    'facebook-domain-verification': 'fxjj654ivuml1214q1aqa9w85tnq1d',
   },
 };
 
