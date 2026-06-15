@@ -5,12 +5,15 @@ import './globals.css';
 export const metadata: Metadata = {
   title: 'Fayz Plyus — Endoskopik Jarrohlik Markazi',
   description: "O'zbekistondagi yetakchi neyrojarrohlik va endoskopik jarrohlik klinikasi. Trigeminal nevralgiya, umurtqa pog'onasi va bosh miya kasalliklari bo'yicha mutaxassis.",
+  other: {
+    'facebook-domain-verification': '8nh2h932fwh4pmnxp08ljnq79wm0ae',
+  },
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="uz">
-      <head><meta name="facebook-domain-verification" content="8nh2h932fwh4pmnxp08ljnq79wm0ae" />
+      <head>
         <Script id="fb-pixel" strategy="afterInteractive">
           {`
             !function(f,b,e,v,n,t,s)
