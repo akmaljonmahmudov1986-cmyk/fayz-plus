@@ -22,11 +22,20 @@ export async function POST(req: NextRequest) {
       );
     }
 
+    const purchaseParams = new URLSearchParams({
+      ism: ism,
+      telefon: telefon,
+      izoh: izoh || "",
+    });
+    const siteUrl = process.env.NEXT_PUBLIC_SITE_URL?.trim() || "https://fayzplus.uz";
+    const purchaseLink = `${siteUrl}/admin/purchase?${purchaseParams.toString()}`;
+
     const text =
       `🩺 <b>Yangi konsultatsiya so'rovi</b>\n\n` +
       `👤 <b>Ism-sharif:</b> ${ism}\n` +
       `📞 <b>Telefon:</b> ${telefon}\n` +
-      `📝 <b>Murojaat:</b> ${izoh || "—"}`;
+      `📝 <b>Murojaat:</b> ${izoh || "—"}\n\n` +
+      `<a href="${purchaseLink}">Purchase</a>`;
 
     const tgUrl = `https://api.telegram.org/bot${token}/sendMessage`;
 
