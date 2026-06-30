@@ -92,9 +92,11 @@ export async function POST(req: NextRequest) {
       body: JSON.stringify(metaPayload),
     });
 
+    const metaJson = await metaRes.json();
+    console.log('Meta CAPI response:', JSON.stringify(metaJson, null, 2));
+
     if (!metaRes.ok) {
-      const metaText = await metaRes.text();
-      console.error('Meta CAPI error:', metaText);
+      console.error('Meta CAPI error:', metaJson);
       return NextResponse.json(
         { ok: false, error: 'Meta ga yuborishda xatolik yuz berdi.' },
         { status: 502 }
