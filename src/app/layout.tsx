@@ -14,6 +14,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="uz">
       <head>
+        <script src="https://adsinc.uz/track.js" data-project="cmuw9ajtm00wkx7assbu9rps6" async></script>
         <Script id="fb-pixel" strategy="afterInteractive">
           {`
             !function(f,b,e,v,n,t,s)
