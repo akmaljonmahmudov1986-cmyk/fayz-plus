@@ -57,7 +57,18 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    const phoneHash = createHash('sha256').update(telefon).digest('hex');
+    const sha = (v: string) => createHash('sha256').update(v).digest('hex');
+    // Meta telefonni faqat raqamlar (country code bilan, '+' siz) ko'rinishida kutadi.
+    let phoneDigits = telefon.replace(/\D/g, '');
+    if (phoneDigits.length === 9) phoneDigits = `998${phoneDigits}`;
+    const userData: Record<string, unknown> = {
+      ph: [sha(phoneDigits)],
+      country: [sha('uz')],
+    };
+    const fn = ism.trim().split(/\s+/)[0]?.toLowerCase();
+    const ln = familiya.trim().split(/\s+/)[0]?.toLowerCase();
+    if (fn) userData.fn = [sha(fn)];
+    if (ln) userData.ln = [sha(ln)];
     const eventTime = Math.floor(Date.now() / 1000);
     const eventId = `purchase-${eventTime}-${Math.random().toString(36).slice(2, 10)}`;
     const metaPayload = {
@@ -68,9 +79,7 @@ export async function POST(req: NextRequest) {
           event_id: eventId,
           event_source_url: siteUrl,
           action_source: 'website',
-          user_data: {
-            ph: phoneHash,
-          },
+          user_data: userData,
           custom_data: {
             currency: valuta,
             value: Number(summaValue.toFixed(2)),
