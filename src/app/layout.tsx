@@ -25,8 +25,16 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             t.src=v;s=b.getElementsByTagName(e)[0];
             s.parentNode.insertBefore(t,s)}(window, document,'script',
             'https://connect.facebook.net/en_US/fbevents.js');
-            fbq('init', '1862709324284094');
-            fbq('track', 'PageView');
+            var FAYZ='1862709324284094', NEVRO='1531365638718394';
+            var src='fayz';
+            try {
+              var q=new URLSearchParams(location.search).get('src');
+              if(q==='nevro'||q==='fayz'){sessionStorage.setItem('fp_src',q);}
+              src=sessionStorage.getItem('fp_src')||'fayz';
+            } catch(e) {}
+            fbq('init', FAYZ);
+            fbq('init', NEVRO);
+            fbq('trackSingle', src==='nevro'?NEVRO:FAYZ, 'PageView');
           `}
         </Script>
       </head>

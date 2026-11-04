@@ -129,15 +129,20 @@ function BookingForm({ isMobile }: { isMobile: boolean }) {
     setStatus('sending');
     setErrMsg('');
     try {
+      let src = 'fayz';
+      try { src = sessionStorage.getItem('fp_src') || 'fayz'; } catch {}
+      const eventId = `lead-${Date.now()}-${Math.random().toString(36).slice(2, 10)}`;
+      const getCookie = (n: string) => document.cookie.split('; ').find((c) => c.startsWith(n + '='))?.split('=')[1] || '';
       const res = await fetch('/api/navbat', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ ism, telefon, izoh }),
+        body: JSON.stringify({ ism, telefon, izoh, src, eventId, fbp: getCookie('_fbp'), fbc: getCookie('_fbc'), pageUrl: window.location.href }),
       });
       const data = await res.json();
       if (res.ok && data.ok) {
-       if (typeof window !== 'undefined' && (window as any).fbq) {
-          (window as any).fbq('track', 'Lead');
+        if (typeof window !== 'undefined' && (window as any).fbq) {
+          const pixelId = src === 'nevro' ? '1531365638718394' : '1862709324284094';
+          (window as any).fbq('trackSingle', pixelId, 'Lead', {}, { eventID: eventId });
         }
         setStatus('ok');
         setIsm('');
