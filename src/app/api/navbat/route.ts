@@ -82,6 +82,7 @@ export async function POST(req: NextRequest) {
       key: adminKey,
       ism: ism,
       telefon: telefon,
+      src: src,
     });
     const purchaseLink = `https://www.fayzplus.uz/admin/purchase?${purchaseParams.toString()}`;
 

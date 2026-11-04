@@ -9,6 +9,7 @@ type PurchaseFormProps = {
     izoh: string;
   };
   accessKey: string;
+  src?: string;
 };
 
 const colors = {
@@ -22,7 +23,7 @@ const colors = {
   red: '#d9534f',
 };
 
-export default function PurchaseForm({ initialValues, accessKey }: PurchaseFormProps) {
+export default function PurchaseForm({ initialValues, accessKey, src = 'fayz' }: PurchaseFormProps) {
   const [ism, setIsm] = useState(initialValues.ism);
   const [familiya, setFamiliya] = useState('');
   const [telefon, setTelefon] = useState(initialValues.telefon);
@@ -58,6 +59,7 @@ export default function PurchaseForm({ initialValues, accessKey }: PurchaseFormP
           valyuta,
           izoh: izoh.trim(),
           key: accessKey,
+          src,
         }),
       });
 

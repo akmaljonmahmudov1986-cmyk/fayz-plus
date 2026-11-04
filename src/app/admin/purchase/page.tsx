@@ -16,6 +16,7 @@ export default async function PurchasePage({
   const initialIsm = readParam(params.ism);
   const initialTelefon = readParam(params.telefon);
   const initialIzoh = readParam(params.izoh);
+  const initialSrc = readParam(params.src) === 'nevro' ? 'nevro' : 'fayz';
 
   if (!secret) {
     return (
@@ -53,6 +54,7 @@ export default async function PurchasePage({
   return (
     <PurchaseForm
       accessKey={providedKey}
+      src={initialSrc}
       initialValues={{
         ism: initialIsm,
         telefon: initialTelefon,

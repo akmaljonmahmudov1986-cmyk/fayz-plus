@@ -45,8 +45,9 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    const pixelId = process.env.META_PIXEL_ID?.trim();
-    const capiToken = process.env.META_CAPI_TOKEN?.trim();
+    const isNevro = normalizeText(payload.src) === 'nevro';
+    const pixelId = (isNevro ? process.env.META_PIXEL_ID_NEVRO : process.env.META_PIXEL_ID)?.trim();
+    const capiToken = (isNevro ? process.env.META_CAPI_TOKEN_NEVRO : process.env.META_CAPI_TOKEN)?.trim();
     const siteUrl = process.env.NEXT_PUBLIC_SITE_URL?.trim() || new URL(req.url).origin;
 
     if (!pixelId || !capiToken) {
@@ -107,7 +108,7 @@ export async function POST(req: NextRequest) {
     const telegramChatId = process.env.TELEGRAM_CHAT_ID?.trim();
 
     if (telegramToken && telegramChatId) {
-      const telegramText = `✅ Purchase qayd etildi: ${ism} ${familiya}`.trim() + `, ${summaValue} ${valuta}`;
+      const telegramText = `✅ Purchase qayd etildi${isNevro ? ' (Nevro Help)' : ''}: ${ism} ${familiya}`.trim() + `, ${summaValue} ${valuta}`;
       await fetch(`https://api.telegram.org/bot${telegramToken}/sendMessage`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
